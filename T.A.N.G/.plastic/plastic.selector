@@ -1,0 +1,4 @@
+repository "T.A.N.G/T.A.N.G@2475820179242@cloud"
+  path "/"
+    br "/main"
+    co "/main"

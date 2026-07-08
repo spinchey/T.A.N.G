@@ -8,9 +8,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float jumpForce = 10f;
 
+    [SerializeField]
+    private Transform groundCheck;
+
+    [SerializeField]
+    private float groundCheckRadius = 0.15f;
+
+    [SerializeField]
+    private LayerMask groundLayer;
+
     private Rigidbody2D rb;
     private float horizontalInput;
-    private bool isGrounded = true;
+    private bool isGrounded;
 
     private void Awake()
     {
@@ -21,23 +30,20 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
 
+        isGrounded = Physics2D.OverlapCircle(
+            groundCheck.position,
+            groundCheckRadius,
+            groundLayer
+        );
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            isGrounded = false;
         }
     }
 
     private void FixedUpdate()
     {
         rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
     }
 }
